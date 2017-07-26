@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="angular.min.js"></script>
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('UploaderController', function($scope,$http ) {
+            $scope.save = function() {
+                var formdata = new FormData();
+                var file = document.querySelector('input[type=file]').files[0];
+                formdata.append('file', file);
+                console.log(file)
+                $http({
+                    method:'POST',
+                    url:"http://localhost:8080/upload",
+                    data: formdata,
+                    headers: {'Content-Type':undefined},
+                    transformRequest: angular.identity
+                })
+                    .success( function ( data )
+                    {
+                        if(data.result == 200){
+                            console.log(data);
+                        }
+                        if(data.result == 400){
+                            console.log(data.data);
+                        }
+                    });
+
+            }
+        });
+
+    </script>
+</head>
+<body>
+<div ng-app="myApp"  ng-controller="UploaderController" >
+    <input type="text" name="fileName" id="fileName" readonly>
+    <input type="button" value="浏览" onclick="myFile.click()" >
+    <input type="file" file-model="myFile" id="myFile" style="display:none"  onchange="fileName.value = this.value" >
+    <button ng-click="save()" >保存</button>
+</div>
+</body>
+</html>

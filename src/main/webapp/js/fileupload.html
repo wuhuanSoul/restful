@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Insert title here</title>
+
+    <!-- 引用jquery -->
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    <!-- 引用ajaxfileupload.js -->
+    <script src="../js/ajaxfileupload.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            //点击打开文件选择器
+            $("#upload").on('click', function () {
+                $('#fileToUpload').click();
+            });
+
+            //选择文件之后执行上传
+            $('#fileToUpload').on('change', function (obj) {
+                /**
+                 * 上传文件
+                 */
+                $("#fileName").value = obj.value;
+                var url = "";
+                $.ajaxFileUpload({
+                    url: url,
+                    secureuri: false,  // 是否启用安全提 交，默认为false。
+                    fileElementId: "fileToUpload",//file标签的id
+                    dataType: "json",//返回数据的类型,如果不填写，jQuery会自动判断。
+                    data: {name: 'logan'},//一同上传的数据
+                    type: 'post',
+                    success: function (data) {
+                        //把图片替换
+                        var obj = jQuery.parseJSON(data);
+                        $scope.meeting.fileList.push(obj.data);
+                        window.location.reload();
+                        logger.logSuccess("导入成功!");
+                    },
+                    error: function (data) {
+                        logger.logError(data.message);
+                        return;
+                    }
+                });
+
+            });
+
+            $scope.deleteFile = function (index) {
+                $scope.meeting.fileList.splice(index,1);
+                $scope.isShowFile = $scope.meeting.fileList.length > 0 ? true :false;
+            }
+
+        });
+    </script>
+
+</head>
+<body>
+
+<!-- 点击图片，打开文件选择器，确定，上传。(这是网络上的一个图片) -->
+<img id="upload" alt="" style="width: 200px; height: 200px"
+     src="http://d.pcs.baidu.com/thumbnail/e8119cd92364a9b2714ea0a92af15aec?fid=2399642819-250528-305026848845811&time=1405674000&sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-abo3xnZkLb7yMEPLDWiuaQI8kXM%3D&rt=sh&expires=2h&r=900585425&sharesign=unknown&size=c710_u500&quality=100">
+
+<!-- 隐藏file标签 -->
+<input id="fileToUpload" style="display: none" type="file" name="upfile"><br/>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.systec.mapper.HotelMapper">
+  <resultMap id="BaseResultMap" type="com.systec.domain.Hotel">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="post" jdbcType="INTEGER" property="post" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, city_name, address, post
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_hotel
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_hotel
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.systec.domain.Hotel">
+    insert into tb_hotel (id, city_name, address, 
+      post)
+    values (#{id,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{post,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.systec.domain.Hotel">
+    insert into tb_hotel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="cityName != null">
+        city_name,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="post != null">
+        post,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null">
+        #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="post != null">
+        #{post,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.systec.domain.Hotel">
+    update tb_hotel
+    <set>
+      <if test="cityName != null">
+        city_name = #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="post != null">
+        post = #{post,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.systec.domain.Hotel">
+    update tb_hotel
+    set city_name = #{cityName,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      post = #{post,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
